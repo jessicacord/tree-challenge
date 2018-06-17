@@ -4,6 +4,8 @@ import ReactModal from 'react-modal';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import { Grid } from '@material-ui/core';
+import "../styles/modal.css";
+
 
 class TreeModal extends Component {
   constructor (props, context) {
@@ -21,7 +23,9 @@ class TreeModal extends Component {
       ReactModal.setAppElement('#root');
       this.handleOpenModal = this.handleOpenModal.bind(this);
       this.handleCloseModal = this.handleCloseModal.bind(this);
-      this.changeLocation = this.changeLocation.bind(this);
+      this.changeTree = this.changeTree.bind(this);
+      this.createLeaves = this.createLeaves.bind(this);
+      this.createBranches = this.createBranches.bind(this);
       this.processTreeForm = this.processTreeForm.bind(this);
     }
     
@@ -38,11 +42,54 @@ class TreeModal extends Component {
       document.getElementById('root').click();
     }
 
-    changeLocation(event) {
+    changeTree(event) {
       const field = event.target.name;
       const tree = this.state.tree;
       tree[field] = event.target.value;
       this.setState({ tree });
+    }
+
+    createLeaves(min, max) {
+        console.log("Min: " + min + " Max: " + max)
+        let leaves = Math.floor(Math.random() * (max - min + 1) + min);
+        console.log(leaves);
+        return leaves;
+    }
+
+    createBranches(response, branch) {
+        console.log("Creating Branches");
+        const newTree = response;
+        const branches = response.branches;
+        let count = branch
+        const treeId = response.id;
+        const minLeaves = response.minLeaves;
+        const maxLeaves = response.maxLeaves;
+        let leaves;
+        let branchData;
+        const xhr = new XMLHttpRequest();
+
+        if (count > 0) {
+            count -= 1;
+            leaves = this.createLeaves(minLeaves, maxLeaves);
+            branchData = `TreeId=${treeId}&leaves=${leaves}`;
+
+            xhr.open('post', '/api/newBranch');
+            xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            xhr.responseType = 'json';
+            xhr.addEventListener('load', () => {
+                if (xhr.status === 200) {
+                    this.setState({ errorMessage: '' });
+                    this.createBranches(newTree, count);
+                }
+                else if(xhr.status === 500){
+                    this.setState({ errorMessage: "Something went wrong on our end! Please try again later." });
+                } 
+                else {
+                    this.setState({ errorMessage: xhr.response.message });
+                }
+            });
+            xhr.send(branchData); 
+        } 
     }
 
     processTreeForm(event) {
@@ -65,8 +112,9 @@ class TreeModal extends Component {
             minLeaves: '',
             maxLeaves: ''
           };
-          this.setState({ location: treeCopy });
-          this.handleCloseModal();
+          this.setState({ tree: treeCopy });
+          this.createBranches(xhr.response, branches);
+          this.handleCloseModal();         
         }
         else if(xhr.status === 500){
           this.setState({ errorMessage: "Something went wrong on our end! Please try again later." });
@@ -79,6 +127,7 @@ class TreeModal extends Component {
     }
     
   render (){
+    const { classes } = this.props;
     return (
       <Grid container spacing={24}>
         <Grid item xs={12} sm={6}>
@@ -93,7 +142,7 @@ class TreeModal extends Component {
           >        
             <TreeForm 
               onSubmit={this.processTreeForm}
-              onChange={this.changeLocation}
+              onChange={this.changeTree}
               errorMessage={this.state.errorMessage}
               tree={this.state.tree}
             />
@@ -105,4 +154,4 @@ class TreeModal extends Component {
   }
 }
   
-export default TreeModal
+export default TreeModal;

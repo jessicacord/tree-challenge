@@ -17,7 +17,7 @@ const TreeCard = (props) => {
                 <CardContent>
                     <Typography variant="headline">{props.tree.name}</Typography>
                     {props.tree.Branches.map(branch => (
-                        <Branch key={branch.id} branch={branch}/>
+                        <Branch key={branch.id} branch={branch} min={props.tree.minLeaves} max={props.tree.maxLeaves} />
                     ))}
                 </CardContent>
             </Card>

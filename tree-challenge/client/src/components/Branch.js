@@ -16,22 +16,49 @@ class Branch extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            leaves: 0
+            errorMessage:'',
+            min: 0,
+            max: 0,
+            branch: {}
         };
-        this.addLeaves = this.addLeaves.bind(this);
         this.newLeaves = this.newLeaves.bind(this);
+        this.createLeaves = this.createLeaves.bind(this);
     }
 
     componentDidMount() {
-        this.addLeaves();
+        this.setState({ branch: this.props.branch });
+        this.setState({ min: this.props.min });
+        this.setState({ max: this.props.max });
     }
 
-    addLeaves () {
-        this.setState({ leaves: this.props.branch.leaves });
+    createLeaves(min, max) {
+        console.log("New Leaves");
+        let leaves = Math.floor(Math.random() * (max - min + 1) + min);
+        return leaves;
     }
 
     newLeaves() {
-        console.log("new leaves");
+        const id = this.state.branch.id;
+        const leaves = this.createLeaves(this.state.min, this.state.max);
+        const branchData = `leaves=${leaves}`;
+        const url = '/api/updateBranch/' + id;
+        const xhr = new XMLHttpRequest();
+        xhr.open('put', url);
+        xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+        xhr.responseType = 'json';
+        xhr.addEventListener('load', () => {
+            if (xhr.status === 200) {
+                this.setState({ errorMessage: '' });
+                this.setState({ branch: {leaves: leaves }});
+            }
+            else if(xhr.status === 500){
+                this.setState({ errorMessage: "Something went wrong on our end! Please try again later." });
+            } 
+            else {
+                this.setState({ errorMessage: xhr.response.message });
+            }
+        });
+        xhr.send(branchData); 
     }
 
     render() {
@@ -40,9 +67,10 @@ class Branch extends Component {
                 avatar={
                     <Avatar src="./assets/imgs/leaf.png" />
                 }
-                label={this.state.leaves}
+                label={this.state.branch.leaves}
                 onDelete={this.newLeaves}
                 deleteIcon={<CachedIcon />}
+                key={this.state.branch.id}
             />
         )
     }

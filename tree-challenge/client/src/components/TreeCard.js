@@ -11,25 +11,51 @@ import EditTreeModal from './EditTreeModal';
 
 
 
-const TreeCard = (props) => {
-    return (
-        <Grid item xs={12} sm={6} lg={3}>
-            <Card>
-                <CardContent>
-                    <Typography variant="headline">{props.tree.name}</Typography>
-                    <Grid item xs={12}>
-                        {props.tree.Branches.map(branch => (
-                            <Branch key={branch.id} branch={branch} min={props.tree.minLeaves} max={props.tree.maxLeaves} />
-                        ))}
-                    </Grid>
-                    <EditTreeModal tree={props.tree}/>
-                    <Button mini variant="fab" aria-label="delete">
-                        <DeleteIcon />
-                    </Button>
-                </CardContent>
-            </Card>
-        </Grid>
-    )
+class TreeCard extends Component {
+    constructor(props, context) {
+        super(props, context);
+        
+        this.deleteTree =this.deleteTree.bind(this);
+    };
+
+    deleteTree() {
+        const id = this.props.tree.id;
+        const xhr = new XMLHttpRequest();
+        xhr.open('delete', '/api/deleteTree/' + id);
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+              this.setState({ errorMessage: '' });
+          }
+          else if(xhr.status === 500){
+              this.setState({ errorMessage: "Something went wrong on our end! Please try again later." });
+          } 
+          else {
+              this.setState({ errorMessage: xhr.response.message });
+          }
+        });
+        xhr.send();
+      }
+    render() {
+        return (
+            <Grid item xs={12} sm={6} lg={3}>
+                <Card>
+                    <CardContent>
+                        <Typography variant="headline">{this.props.tree.name}</Typography>
+                        <Grid item xs={12}>
+                            {this.props.tree.Branches.map(branch => (
+                                <Branch key={branch.id} branch={branch} min={this.props.tree.minLeaves} max={this.props.tree.maxLeaves} />
+                            ))}
+                        </Grid>
+                        <EditTreeModal tree={this.props.tree}/>
+                        <Button mini variant="fab" aria-label="delete" onClick={this.deleteTree}>
+                            <DeleteIcon />
+                        </Button>
+                    </CardContent>
+                </Card>
+            </Grid>
+        )
+    }
+     
 };
 
 export default TreeCard;

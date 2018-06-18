@@ -6,7 +6,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditTreeModal from './EditTreeModal';
 
 
 
@@ -16,9 +17,15 @@ const TreeCard = (props) => {
             <Card>
                 <CardContent>
                     <Typography variant="headline">{props.tree.name}</Typography>
-                    {props.tree.Branches.map(branch => (
-                        <Branch key={branch.id} branch={branch} min={props.tree.minLeaves} max={props.tree.maxLeaves} />
-                    ))}
+                    <Grid item xs={12}>
+                        {props.tree.Branches.map(branch => (
+                            <Branch key={branch.id} branch={branch} min={props.tree.minLeaves} max={props.tree.maxLeaves} />
+                        ))}
+                    </Grid>
+                    <EditTreeModal tree={props.tree}/>
+                    <Button mini variant="fab" aria-label="delete">
+                        <DeleteIcon />
+                    </Button>
                 </CardContent>
             </Card>
         </Grid>

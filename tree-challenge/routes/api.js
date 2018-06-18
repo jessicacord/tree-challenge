@@ -37,7 +37,7 @@ router.post('/newTree', (req, res) => {
     });
 });
 
-router.put('/updateTree/:id', (req, res) => {
+router.put('/updateTree/', (req, res) => {
     Tree.update({
         name: req.body.name,
         branches: req.body.branches,
@@ -45,10 +45,12 @@ router.put('/updateTree/:id', (req, res) => {
         maxLeaves: req.body.maxLeaves
     },{
         where: {
-            id: req.params.id
+            id: req.body.id,
         }
     }).then(result => {
-        res.json(result);
+        Tree.findOne({ where: { id: req.body.id } }, { include: [{ model: Branch }] }).then(result => {
+            return res.json(result);
+        })
     }).catch(err => {
         res.status(400).json({
             success: false,
@@ -121,6 +123,18 @@ router.put('/updateBranch/:id', (req, res) => {
         });
     });
 });
+
+router.delete('/deleteBranches/', (req, res) => {
+    Branch.destroy({ where: {TreeId: req.body.TreeId}}).then(result => {
+        res.json(result);
+    }).catch(err => {
+        res.status(400).json({
+            success: false,
+            message: 'Could not delete branches',
+            debug: err
+        });
+    });
+})
 
 
 module.exports = router;

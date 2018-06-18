@@ -1,19 +1,20 @@
 import React, { Component } from "react";
-import TreeForm from './TreeForm';
+import EditTreeForm from './EditTreeForm';
 import ReactModal from 'react-modal';
 import Button from '@material-ui/core/Button';
-import moment from 'moment';
+import Icon from '@material-ui/core/Icon';
 import { Grid } from '@material-ui/core';
 import "../styles/modal.css";
 
 
-class TreeModal extends Component {
+class EditTreeModal extends Component {
   constructor (props, context) {
     super(props, context);
       this.state = { 
         errorMessage: '',
         showModal: false, 
         tree: {
+          id: '',
           name: '',
           branches: '',
           minLeaves: '',
@@ -26,11 +27,12 @@ class TreeModal extends Component {
       this.changeTree = this.changeTree.bind(this);
       this.createLeaves = this.createLeaves.bind(this);
       this.createBranches = this.createBranches.bind(this);
+      this.deleteBranches = this.deleteBranches.bind(this);
       this.processTreeForm = this.processTreeForm.bind(this);
     }
     
     componentDidMount() {
-      
+      this.setState({tree: this.props.tree})
     };
 
     handleOpenModal () {
@@ -91,15 +93,38 @@ class TreeModal extends Component {
         } 
     }
 
+    deleteBranches() {
+      const treeId = this.state.tree.id;
+      const branchData = `TreeId=${treeId}`;
+      const xhr = new XMLHttpRequest();
+      xhr.open('delete', '/api/deleteBranches');
+      xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+      xhr.responseType = 'json';
+      xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+              this.setState({ errorMessage: '' });
+          }
+          else if(xhr.status === 500){
+              this.setState({ errorMessage: "Something went wrong on our end! Please try again later." });
+          } 
+          else {
+              this.setState({ errorMessage: xhr.response.message });
+          }
+      });
+      xhr.send(branchData);
+    }
+
     processTreeForm(event) {
       event.preventDefault();
+      this.deleteBranches();
+      const id = encodeURIComponent(this.state.tree.id);
       const name = encodeURIComponent(this.state.tree.name);
       const branches = encodeURIComponent(this.state.tree.branches);
       const minLeaves = encodeURIComponent(this.state.tree.minLeaves);
       const maxLeaves = encodeURIComponent(this.state.tree.maxLeaves);
-      const formData = `name=${name}&branches=${branches}&minLeaves=${minLeaves}&maxLeaves=${maxLeaves}`;
+      const formData = `id=${id}&name=${name}&branches=${branches}&minLeaves=${minLeaves}&maxLeaves=${maxLeaves}`;
       const xhr = new XMLHttpRequest();
-      xhr.open('post', '/api/newTree');
+      xhr.open('put', '/api/updateTree' );
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
       xhr.responseType = 'json';
       xhr.addEventListener('load', () => {
@@ -130,7 +155,9 @@ class TreeModal extends Component {
     return (
       <Grid container spacing={24}>
         <Grid item xs={12} sm={6}>
-          <Button fullWidth color="secondary" variant="raised" onClick={this.handleOpenModal}>Add A Tree</Button>
+        <Button mini variant="fab" color="secondary" aria-label="edit" onClick={this.handleOpenModal}>
+            <Icon>edit_icon</Icon>
+        </Button>
         </Grid>
         <Grid item xs={12} sm={6}>
           <ReactModal 
@@ -139,7 +166,7 @@ class TreeModal extends Component {
             shouldFocusAfterRender= {true}
             shouldCloseOnOverlayClick= {true}
           >        
-            <TreeForm 
+            <EditTreeForm 
               onSubmit={this.processTreeForm}
               onChange={this.changeTree}
               errorMessage={this.state.errorMessage}
@@ -153,4 +180,4 @@ class TreeModal extends Component {
   }
 }
   
-export default TreeModal;
+export default EditTreeModal;

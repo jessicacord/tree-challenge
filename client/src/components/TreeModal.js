@@ -88,7 +88,9 @@ class TreeModal extends Component {
                 }
             });
             xhr.send(branchData); 
-        } 
+        } else {
+          this.props.getTrees();
+        }
     }
 
     processTreeForm(event, getTrees) {

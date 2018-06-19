@@ -81,7 +81,6 @@ class EditTreeModal extends Component {
                 if (xhr.status === 200) {
                     this.setState({ errorMessage: '' });
                     this.createBranches(newTree, count);
-                    this.props.getTrees();
                 }
                 else if(xhr.status === 500){
                     this.setState({ errorMessage: "Something went wrong on our end! Please try again later." });
@@ -91,7 +90,9 @@ class EditTreeModal extends Component {
                 }
             });
             xhr.send(branchData); 
-        } 
+        } else {
+          this.props.getTrees();
+        }
     }
 
     deleteBranches() {

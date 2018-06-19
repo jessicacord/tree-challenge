@@ -28,7 +28,7 @@ io.on('connection', socket => {
   
   socket.on('getTrees', trees => {
     console.log("Sending Trees");
-    io.sockets.emit('getTrees', trees)
+    io.sockets.emit('updateTrees', trees)
   })
 
   socket.on('disconnect', () => {

@@ -22,15 +22,17 @@ class App extends Component {
   }
 
   receive() {
-    socket.on('getTrees', trees => {
+    socket.on('updateTrees', trees => {
       this.setState({trees: trees})
     });
   }
 
+  //Send 
   send(trees) {
     socket.emit('getTrees', trees);
   }
-
+  
+  //DB: Get Trees
   getTrees() {
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', () => {

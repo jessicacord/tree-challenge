@@ -50,6 +50,7 @@ class Branch extends Component {
             if (xhr.status === 200) {
                 this.setState({ errorMessage: '' });
                 this.setState({ branch: {leaves: leaves }});
+                this.props.getTrees();
             }
             else if(xhr.status === 500){
                 this.setState({ errorMessage: "Something went wrong on our end! Please try again later." });

@@ -25,6 +25,7 @@ class TreeCard extends Component {
         xhr.addEventListener('load', () => {
           if (xhr.status === 200) {
               this.setState({ errorMessage: '' });
+              this.props.getTrees();
           }
           else if(xhr.status === 500){
               this.setState({ errorMessage: "Something went wrong on our end! Please try again later." });
@@ -43,10 +44,10 @@ class TreeCard extends Component {
                         <Typography variant="headline">{this.props.tree.name}</Typography>
                         <Grid item xs={12}>
                             {this.props.tree.Branches.map(branch => (
-                                <Branch key={branch.id} branch={branch} min={this.props.tree.minLeaves} max={this.props.tree.maxLeaves} />
+                                <Branch key={branch.id} branch={branch} min={this.props.tree.minLeaves} max={this.props.tree.maxLeaves} getTrees={this.props.getTrees} />
                             ))}
                         </Grid>
-                        <EditTreeModal tree={this.props.tree}/>
+                        <EditTreeModal tree={this.props.tree} getTrees={this.props.getTrees} />
                         <Button mini variant="fab" aria-label="delete" onClick={this.deleteTree}>
                             <DeleteIcon />
                         </Button>

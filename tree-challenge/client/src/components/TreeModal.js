@@ -51,7 +51,7 @@ class TreeModal extends Component {
 
     createLeaves(min, max) {
         console.log("Min: " + min + " Max: " + max)
-        let leaves = Math.floor(Math.random() * (max - min + 1) + min);
+        let leaves = Math.floor((Math.random() * (max - min + 1)) + min);
         console.log(leaves);
         return leaves;
     }
@@ -91,7 +91,7 @@ class TreeModal extends Component {
         } 
     }
 
-    processTreeForm(event) {
+    processTreeForm(event, getTrees) {
       event.preventDefault();
       const name = encodeURIComponent(this.state.tree.name);
       const branches = encodeURIComponent(this.state.tree.branches);

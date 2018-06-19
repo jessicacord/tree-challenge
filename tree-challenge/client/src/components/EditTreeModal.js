@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import EditTreeForm from './EditTreeForm';
 import ReactModal from 'react-modal';
 import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
+import EditIcon from '@material-ui/icons/Edit';
 import { Grid } from '@material-ui/core';
 import "../styles/modal.css";
 
@@ -81,6 +81,7 @@ class EditTreeModal extends Component {
                 if (xhr.status === 200) {
                     this.setState({ errorMessage: '' });
                     this.createBranches(newTree, count);
+                    this.props.getTrees();
                 }
                 else if(xhr.status === 500){
                     this.setState({ errorMessage: "Something went wrong on our end! Please try again later." });
@@ -156,7 +157,7 @@ class EditTreeModal extends Component {
       <Grid container spacing={24}>
         <Grid item xs={12} sm={6}>
         <Button mini variant="fab" color="secondary" aria-label="edit" onClick={this.handleOpenModal}>
-            <Icon>edit_icon</Icon>
+            <EditIcon/>
         </Button>
         </Grid>
         <Grid item xs={12} sm={6}>

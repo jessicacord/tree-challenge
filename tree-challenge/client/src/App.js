@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { TreeCard, TreeModal } from './components';
+import io from 'socket.io-client';
+var socket = io.connect();
 
 class App extends Component {
   constructor(props, context) {
@@ -11,10 +13,22 @@ class App extends Component {
     }
 
     this.getTrees = this.getTrees.bind(this);
+    this.send = this.send.bind(this);
+    this.receive = this.receive.bind(this);
   };
 
   componentDidMount(){
     this.getTrees();
+  }
+
+  receive() {
+    socket.on('getTrees', trees => {
+      this.setState({trees: trees})
+    });
+  }
+
+  send() {
+    socket.emit('getTrees', this.state.trees);
   }
 
   getTrees() {
@@ -24,6 +38,7 @@ class App extends Component {
       if(xhr.readyState === 4 && xhr.status === 200){
         let response = JSON.parse(xhr.response);
         this.setState({ trees: response.trees });
+        this.send();
         console.log(this.state.trees)
       };
     })
@@ -32,12 +47,13 @@ class App extends Component {
   };
 
   render() {
+    this.receive();
     return (
       <div>
         <Grid container spacing={24}>
-          <TreeModal />
+          <TreeModal getTrees={this.getTrees}/>
           {this.state.trees.map(tree => (
-              <TreeCard key={tree.id} tree={tree} />
+              <TreeCard key={tree.id} tree={tree} getTrees={this.getTrees} />
           ))}
         </Grid>
       </div>

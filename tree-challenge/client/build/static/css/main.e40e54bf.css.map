@@ -1,0 +1,1 @@
+{"version":3,"sources":["styles/modal.css"],"names":[],"mappings":"AAAA,iCACI,SAAU","file":"static/css/main.e40e54bf.css","sourcesContent":[".ReactModal__Content--after-open{\n    width:50%;\n}\n\n\n// WEBPACK FOOTER //\n// ./src/styles/modal.css"],"sourceRoot":""}

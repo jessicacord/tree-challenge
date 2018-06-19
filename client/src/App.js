@@ -27,8 +27,8 @@ class App extends Component {
     });
   }
 
-  send() {
-    socket.emit('getTrees', this.state.trees);
+  send(trees) {
+    socket.emit('getTrees', trees);
   }
 
   getTrees() {
@@ -38,7 +38,7 @@ class App extends Component {
       if(xhr.readyState === 4 && xhr.status === 200){
         let response = JSON.parse(xhr.response);
         this.setState({ trees: response.trees });
-        this.send();
+        this.send(response.trees);
         console.log(this.state.trees)
       };
     })

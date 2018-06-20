@@ -31,13 +31,13 @@ yarn install
 cd ..
 yarn build
 ```
-### config.json File
+### .env File
 1. Create a `.env` file in the root directory and define your database credentials:
 ```
   REACT_APP_DB_USERNAME="your_username"
   REACT_APP_DB_PASSWORD="your_password"
 ```
-2. Edit any of the values in the brackets above to coordinate with your Postgres Database.
+2. Edit any of the values in the brackets above to coordinate with your MySQL Database.
 ### Setup Database
 1. Drop Database
 ```

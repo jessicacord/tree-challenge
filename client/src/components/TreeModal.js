@@ -4,7 +4,7 @@ import ReactModal from 'react-modal';
 import Button from '@material-ui/core/Button';
 import moment from 'moment';
 import { Grid } from '@material-ui/core';
-import "../styles/modal.css";
+import "../styles/styles.css";
 
 
 class TreeModal extends Component {
@@ -51,7 +51,9 @@ class TreeModal extends Component {
 
     createLeaves(min, max) {
         console.log("Min: " + min + " Max: " + max)
-        let leaves = Math.floor((Math.random() * (max - min + 1)) + min);
+        const minInt = parseInt(min);
+        const maxInt = parseInt(max);
+        const leaves = Math.floor((Math.random() * (maxInt - minInt + 1)) + minInt);
         console.log(leaves);
         return leaves;
     }

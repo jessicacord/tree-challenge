@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import { TreeCard, TreeModal } from './components';
+import { Banner } from './containers';
 import io from 'socket.io-client';
 var socket = io.connect();
 
@@ -53,7 +54,7 @@ class App extends Component {
     return (
       <div>
         <Grid container spacing={24}>
-          <TreeModal getTrees={this.getTrees}/>
+          <Banner getTrees={this.getTrees}/>
           {this.state.trees.map(tree => (
               <TreeCard key={tree.id} tree={tree} getTrees={this.getTrees} />
           ))}

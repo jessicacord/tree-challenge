@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import { TreeCard, TreeModal } from './components';
-import { Banner } from './containers';
+import { TreeCard } from './components';
+import { Banner, Footer } from './containers';
 import io from 'socket.io-client';
 var socket = io.connect();
 
@@ -24,7 +23,6 @@ class App extends Component {
 
   receive() {
     socket.on('updateTrees', trees => {
-      console.log("Receive " + trees);
       this.setState({trees: trees})
     });
   }
@@ -36,7 +34,6 @@ class App extends Component {
   
   //DB: Get Trees
   getTrees() {
-    console.log("Get All Trees");
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', () => {
       let trees = [];
@@ -44,7 +41,6 @@ class App extends Component {
         let response = JSON.parse(xhr.response);
         this.setState({ trees: response.trees });
         this.send(response.trees);
-        console.log(this.state.trees)
       };
     })
     xhr.open('GET', '/api/getTrees');
@@ -54,13 +50,19 @@ class App extends Component {
   render() {
     this.receive();
     return (
-      <div>
-        <Grid container spacing={24}>
-          <Banner getTrees={this.getTrees}/>
-          {this.state.trees.map(tree => (
-              <TreeCard key={tree.id} tree={tree} getTrees={this.getTrees} />
-          ))}
-        </Grid>
+      <div className="site">      
+        <Banner getTrees={this.getTrees}/>
+
+        <div className="content">
+          <Grid container spacing={24}>
+            {this.state.trees.map(tree => (
+                <TreeCard key={tree.id} tree={tree} getTrees={this.getTrees} />
+            ))}
+          </Grid>
+        </div>
+
+        <Footer />
+
       </div>
     )
   }

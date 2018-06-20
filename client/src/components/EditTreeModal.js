@@ -1,12 +1,33 @@
 import React, { Component } from "react";
+import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
 import EditTreeForm from './EditTreeForm';
 import ReactModal from 'react-modal';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
-import FormHelperText from '@material-ui/core/FormHelperText';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { Grid } from '@material-ui/core';
 import "../styles/styles.css";
 
+const styles = () => ({
+  editButton: {
+    background: '#ff5c5c',
+    color: 'white',
+    '&:hover': {
+      background: '#B83737',
+      color: 'white'
+    },
+    marginRight: '5px'
+  },
+  closeButton: {
+    background: '#1f2042',
+    color: 'white',
+    '&:hover': {
+      background: '#356C8E',
+      color: 'white'
+    }
+  }
+});
 
 class EditTreeModal extends Component {
   constructor (props, context) {
@@ -107,15 +128,10 @@ class EditTreeModal extends Component {
           break;
         case 'maxLeaves':
           if(this.state.tree.minLeaves < valueInt && reg.test(valueInt)) {
-            console.log(valueInt);
             maxValid=true;
             formErrors.max = '';
-            console.log(maxValid);
           } else {
-            console.log(valueInt);
-            console.log(this.state.tree.minLeaves);
             maxValid=false;
-            console.log(maxValid);
             formErrors.max = 'Enter a number greater than the Min'
           }
           break;
@@ -132,14 +148,11 @@ class EditTreeModal extends Component {
     }
 
     createLeaves(min, max) {
-        console.log("Min: " + min + " Max: " + max)
         let leaves = Math.floor(Math.random() * (max - min + 1) + min);
-        console.log(leaves);
         return leaves;
     }
 
     createBranches(response, branch) {
-        console.log("Creating Branches");
         const newTree = response;
         let count = branch
         const treeId = response.id;
@@ -237,11 +250,16 @@ class EditTreeModal extends Component {
     const { classes } = this.props;
     return (
       <Grid container spacing={24}>
-        <Grid item xs={12} sm={6}>
-        <Button mini variant="fab" color="secondary" aria-label="edit" onClick={this.handleOpenModal}>
-            <EditIcon/>
-        </Button>
+
+        <Grid item xs={12}>
+          <Button mini variant="fab" className={classNames(classes.editButton)} color="secondary" aria-label="edit" onClick={this.handleOpenModal}>
+              <EditIcon/>
+          </Button>
+          <Button mini variant="fab" className={classNames(classes.deleteButton)} aria-label="delete" onClick={this.props.deleteTree}>
+              <DeleteIcon />
+          </Button>
         </Grid>
+
         <Grid item xs={12} sm={6}>
           <ReactModal 
             isOpen={this.state.showModal}
@@ -257,7 +275,7 @@ class EditTreeModal extends Component {
               formErrors={this.state.formErrors}
               submitDisabled={this.state.submitDisabled}
             />
-            <Button fullWidth color="primary" variant="raised" onClick={this.handleCloseModal}>Close</Button>
+            <Button fullWidth color="primary" className={classNames(classes.closeButton)} variant="raised" onClick={this.handleCloseModal}>Close</Button>
           </ReactModal>
         </Grid>
       </Grid>
@@ -265,4 +283,4 @@ class EditTreeModal extends Component {
   }
 }
   
-export default EditTreeModal;
+export default withStyles(styles)(EditTreeModal);

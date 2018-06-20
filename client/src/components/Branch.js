@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import CachedIcon from '@material-ui/icons/Cached';
@@ -32,7 +31,6 @@ class Branch extends Component {
     }
 
     createLeaves(min, max) {
-        console.log("New Leaves");
         let leaves = Math.floor(Math.random() * (max - min + 1) + min);
         return leaves;
     }
@@ -66,12 +64,13 @@ class Branch extends Component {
         return (
             <Chip
                 avatar={
-                    <Avatar src="./assets/imgs/leaf.png" />
+                    <Avatar className="leaf-avatar" src="./assets/imgs/leaf.png" />
                 }
                 label={this.state.branch.leaves}
                 onDelete={this.newLeaves}
                 deleteIcon={<CachedIcon />}
                 key={this.state.branch.id}
+                className="branch"
             />
         )
     }

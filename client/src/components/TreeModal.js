@@ -1,10 +1,34 @@
 import React, { Component } from "react";
+import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
 import TreeForm from './TreeForm';
 import ReactModal from 'react-modal';
 import Button from '@material-ui/core/Button';
-import moment from 'moment';
 import { Grid } from '@material-ui/core';
 import "../styles/styles.css";
+
+const styles = () => ({
+  addButton: {
+    background: 'rgba(255, 255, 255, 0)',
+    border: '#ff5c5c solid 2px',
+    color: '#ff5c5c',
+    '&:hover': {
+      background: '#ff5c5c',
+      color: 'white'
+    },
+    display: 'block',
+    margin: 'auto',
+    width: '50%'
+  },
+  closeButton: {
+    background: '#1f2042',
+    color: 'white',
+    '&:hover': {
+      background: '#356C8E',
+      color: 'white'
+    }
+  }
+});
 
 
 class TreeModal extends Component {
@@ -104,15 +128,10 @@ class TreeModal extends Component {
           break;
         case 'maxLeaves':
           if(this.state.tree.minLeaves < valueInt && reg.test(valueInt)) {
-            console.log(valueInt);
             maxValid=true;
             formErrors.max = '';
-            console.log(maxValid);
           } else {
-            console.log(valueInt);
-            console.log(this.state.tree.minLeaves);
             maxValid=false;
-            console.log(maxValid);
             formErrors.max = 'Enter a number greater than the Min'
           }
           break;
@@ -137,7 +156,6 @@ class TreeModal extends Component {
     }
 
     createBranches(response, branch) {
-        console.log("Creating Branches");
         const newTree = response;
         let count = branch
         const treeId = response.id;
@@ -212,8 +230,8 @@ class TreeModal extends Component {
     const { classes } = this.props;
     return (
       <Grid container spacing={24}>
-        <Grid item xs={12} sm={6}>
-          <Button fullWidth color="secondary" variant="raised" onClick={this.handleOpenModal}>Add A Tree</Button>
+        <Grid item xs={12}>
+          <Button className={classNames(classes.addButton)} color="secondary" variant="raised" onClick={this.handleOpenModal}>Add A Tree</Button>
         </Grid>
         <Grid item xs={12} sm={6}>
           <ReactModal 
@@ -230,7 +248,7 @@ class TreeModal extends Component {
               formErrors={this.state.formErrors}
               submitDisabled={this.state.submitDisabled}
             />
-            <Button fullWidth color="primary" variant="raised" onClick={this.handleCloseModal}>Close</Button>
+            <Button fullWidth color="primary" className={classNames(classes.closeButton)} variant="raised" onClick={this.handleCloseModal}>Close</Button>
           </ReactModal>
         </Grid>
       </Grid>
@@ -238,4 +256,4 @@ class TreeModal extends Component {
   }
 }
   
-export default TreeModal;
+export default withStyles(styles)(TreeModal);

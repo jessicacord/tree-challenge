@@ -1,9 +1,54 @@
+.site{
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+.content {
+    flex: 1;
+    margin: 0rem 3rem;
+}
+
 /* Banner */
 .banner{
-    background-color: black;
+    background-color: #1f2042;
+    height: 40vh;
+    margin-bottom: 2rem;
+}
+#banner-logo {
+    display: block;
+    margin: auto;
+    margin-top: 4rem;
+    margin-bottom: 2rem;
+    width: 80%;
 }
 
 /* Modal */
 .ReactModal__Content--after-open{
     width:50%;
+}
+
+/* Branch */
+.branch {
+    margin: 5px;
+}
+.leaf-avatar {
+    background: #8E8D3C;
+    padding: 0.3rem;
+}
+
+/* Footer */
+.footer {
+    position: relative;
+    bottom: 0;
+    background-image: url("/assets/imgs/grass.png");
+    background-size: auto 14rem;
+    background-repeat: repeat-x;
+    height: 14rem;
+    margin-top: -4rem;
+    margin-bottom: -3rem;
+}
+.footer-link {
+    text-align: center;
+    position: relative;
+    top: 8rem;
 }

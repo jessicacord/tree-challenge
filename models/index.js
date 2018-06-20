@@ -7,12 +7,13 @@ var basename  = path.basename(__filename);
 var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../config/config.js')[env];
 var db        = {};
+var dotenv    = require('dotenv').config();
 
 if (config.use_env_variable) {
   var sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
   var sequelize = new Sequelize(config.database, config.username, config.password, config);
-  console.log("DOTENV: " + env)
+  console.log("DOTENV: " + process.env.REACT_APP_TEST);
 }
 
 fs

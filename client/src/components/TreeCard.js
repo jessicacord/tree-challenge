@@ -14,9 +14,17 @@ import EditTreeModal from './EditTreeModal';
 class TreeCard extends Component {
     constructor(props, context) {
         super(props, context);
-        
+        this.state ={
+            tree: {},
+            branches: []
+        }
         this.deleteTree =this.deleteTree.bind(this);
     };
+
+    componentDidMount() {
+        this.setState({tree: this.props.tree});
+        this.setState({branches: this.props.tree.Branches})
+    }
 
     deleteTree() {
         const id = this.props.tree.id;

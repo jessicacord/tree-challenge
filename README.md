@@ -15,6 +15,7 @@ creating ​a ​live-updating ​tree ​view ​as ​a ​web ​application.
 ### Server
 * body-parser
 * express
+* mysql2
 * sequelize
 * sequelize-cli
 ### Production

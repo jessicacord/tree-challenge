@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import { Typography } from '@material-ui/core';
 
 const TreeForm = (props) => (
@@ -21,6 +21,7 @@ const TreeForm = (props) => (
             name="name" 
             required
           />
+          <FormHelperText className="error-text">{props.formErrors.name}</FormHelperText>
         </Grid>
         <Grid item xs={12} sm={6} className="text-center">
           <Input
@@ -31,6 +32,7 @@ const TreeForm = (props) => (
             name="branches"
             placeholder="Branches"
           />
+          <FormHelperText className="error-text">{props.formErrors.branches}</FormHelperText>
         </Grid>
         <Grid item xs={12} className="text-center">
           <Typography variant="subheading">Leaves</Typography>
@@ -44,6 +46,7 @@ const TreeForm = (props) => (
             name="minLeaves"
             placeholder="Min"
           />
+          <FormHelperText className="error-text">{props.formErrors.min}</FormHelperText>
         </Grid>
         <Grid item xs={12} sm={6} className="text-center">
           <Input
@@ -54,9 +57,10 @@ const TreeForm = (props) => (
             name="maxLeaves"
             placeholder="Max"
           />
+          <FormHelperText className="error-text">{props.formErrors.max}</FormHelperText>
         </Grid>
         <Grid item xs={12} sm={12} className="text-center">
-          <Button fullWidth variant="raised" color="secondary" type="submit">Submit</Button>
+          <Button disabled={props.submitDisabled} fullWidth variant="raised" color="secondary" type="submit">Submit</Button>
         </Grid>
       </Grid>
     </form>

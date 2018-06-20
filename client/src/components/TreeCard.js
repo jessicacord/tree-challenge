@@ -24,6 +24,7 @@ class TreeCard extends Component {
     componentDidMount() {
         this.setState({tree: this.props.tree});
         this.setState({branches: this.props.tree.Branches})
+        console.log("Branch Update:" + this.props.tree.Branches);
     }
 
     deleteTree() {

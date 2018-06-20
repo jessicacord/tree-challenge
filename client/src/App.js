@@ -24,6 +24,7 @@ class App extends Component {
 
   receive() {
     socket.on('updateTrees', trees => {
+      console.log("Receive " + trees);
       this.setState({trees: trees})
     });
   }
@@ -35,6 +36,7 @@ class App extends Component {
   
   //DB: Get Trees
   getTrees() {
+    console.log("Get All Trees");
     const xhr = new XMLHttpRequest();
     xhr.addEventListener('load', () => {
       let trees = [];
